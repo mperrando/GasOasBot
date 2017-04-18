@@ -4,10 +4,10 @@ require 'timers'
 
 SECS = ARGV[0].to_i || 3
 AUTH_FILE = ARGV[1] || "auth_ids.txt"
+TOKEN = ENV['TELEGRAM_TOKEN'] || '342935347:AAEdo4J_iTubxtXkjduaxmfyqvU-cspicgU'
 puts "Timeout for automatic ON is #{SECS} seconds"
 puts "Authorized ids file: #{AUTH_FILE}"
-
-token = ENV['TELEGRAM_TOKEN'] || '342935347:AAEdo4J_iTubxtXkjduaxmfyqvU-cspicgU'
+puts "Telegram token in use: #{TOKEN}"
 
 class Auth
   require 'listen'
@@ -122,7 +122,7 @@ class EUnath < RuntimeError; end
 @auth = Auth.new AUTH_FILE
 @lights = Lights.new SECS, ShellCommands.new
 
-Telegram::Bot::Client.run(token) do |bot|
+Telegram::Bot::Client.run(TOKEN) do |bot|
   #bot.enable_botan!('WjrKZsmFeEjMrEVxXekFVb6d-RoDB1sk')
 
   begin
