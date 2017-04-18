@@ -109,6 +109,10 @@ class Lights
     end
   end
 
+  def on_in
+    @timer && @timer.fires_in
+  end
+
   def cancel_timer
     @timer && @timer.cancel
   end
@@ -137,7 +141,8 @@ Telegram::Bot::Client.run(token) do |bot|
       when /^\/start/
         kb = [
           Telegram::Bot::Types::KeyboardButton.new(text: 'Spegni'),
-          Telegram::Bot::Types::KeyboardButton.new(text: 'Accendi')
+          Telegram::Bot::Types::KeyboardButton.new(text: 'Accendi'),
+          Telegram::Bot::Types::KeyboardButton.new(text: 'Status'),
         ]
         markup = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: kb)
         bot.api.send_message(chat_id: message.chat.id, text: 'Benvenuto!', reply_markup: markup)
@@ -147,10 +152,17 @@ Telegram::Bot::Client.run(token) do |bot|
           bot.api.send_message(chat_id: message.chat.id, text: "Tempo scaduto: ho riacceso le luci")
         end
       when /^accendi/i
-        bot.api.send_message(chat_id: message.chat.id, text: "Accendo le luci")
         @lights.turn_on
+      when /^status/i
+        @lights.on_in.tap do |s|
+          if s && s > 0
+            bot.api.send_message(chat_id: message.chat.id, text: "Riaccensione luci tra #{s.to_i} secondi")
+          else
+            bot.api.send_message(chat_id: message.chat.id, text: "Nessuna riaccensione programmata")
+          end
+        end
       else
-        bot.api.send_message(chat_id: message.chat.id, text: "Non ho cpaito cosa mi chiedi")
+        bot.api.send_message(chat_id: message.chat.id, text: "Non ho capito cosa mi chiedi")
       end
     end
   rescue
