@@ -115,6 +115,7 @@ class Lights
 
   def cancel_timer
     @timer && @timer.cancel
+    @timer = nil
   end
 end
 
