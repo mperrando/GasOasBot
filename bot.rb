@@ -86,7 +86,9 @@ class Lights
     @my_mutex = Mutex.new
     Thread.new do
       loop do
-        @timers.wait
+        @timers.wait do
+          sleep 1
+        end
       end
     end
   end
