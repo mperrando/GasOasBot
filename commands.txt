@@ -1,0 +1,2 @@
+start - Attiva il BOT e ricevi le notifiche
+stop - Smetti di ricevere le notifiche dal BOT
