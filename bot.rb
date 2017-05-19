@@ -118,12 +118,17 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       @notifier.unregister_chat message.chat.id
       bot.api.send_message(chat_id: message.chat.id, text: 'Bye bye! Per riattivare le notifiche scrivei /start', reply_markup: markup)
     when /^spegni/i
-      @notifier.send text: "Spengo le luci. Verranno riaccese alle #{(Time.now + SECS.to_i).strftime '%R'}."
+      on_at = "Verranno riaccese alle #{(Time.now + SECS.to_i).strftime '%R'}"
+      actor = message.from
+      bot.api.send_message(chat_id: message.chat.id, text: "Spengo le luci. #{on_at}.", reply_markup: markup)
+      @notifier.send_other(message.chat.id, text: "@#{actor.username} ha spento le luci. #{on_at}.")
       @lights.turn_off do
-        @notifier.send text: "Tempo scaduto: ho riacceso le luci"
+        @notifier.send_other(message.chat.id, text: "Tempo scaduto: ho riacceso le luci.")
       end
     when /^accendi/i
-      @notifier.send text: "Accendo le luci."
+      actor = message.from
+      bot.api.send_message(chat_id: message.chat.id, text: "@#{actor.username} ha acceso le luci.", reply_markup: markup)
+      @notifier.send_other(message.chat.id, text: "Accendo le luci.")
       @lights.turn_on
     when /^status/i
       @lights.on_in.tap do |s|

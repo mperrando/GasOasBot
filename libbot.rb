@@ -88,6 +88,13 @@ class ChatsNotifier
     save
   end
 
+  def send_other current_id, opts
+    current_id=nil
+    (@chats.to_a - [current_id]).each do |id|
+      @bot.api.send_message({chat_id: id}.merge opts)
+    end
+  end
+
   def send opts
     @chats.each do |id|
       @bot.api.send_message({chat_id: id}.merge opts)
