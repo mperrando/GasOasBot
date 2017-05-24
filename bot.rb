@@ -107,8 +107,10 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
     case message.text
     when /^\/start/
       kb = [
-        Telegram::Bot::Types::KeyboardButton.new(text: 'Spegni'),
-        Telegram::Bot::Types::KeyboardButton.new(text: 'Accendi'),
+        [
+          Telegram::Bot::Types::KeyboardButton.new(text: 'Spegni'),
+          Telegram::Bot::Types::KeyboardButton.new(text: 'Accendi'),
+        ],
         Telegram::Bot::Types::KeyboardButton.new(text: 'Status'),
       ]
       markup = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: kb)
