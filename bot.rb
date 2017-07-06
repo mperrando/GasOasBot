@@ -129,8 +129,8 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       end
     when /^accendi/i
       actor = message.from
-      bot.api.send_message(chat_id: message.chat.id, text: "@#{actor.username} ha acceso le luci.", reply_markup: markup)
-      @notifier.send_other(message.chat.id, text: "Accendo le luci.")
+      bot.api.send_message(chat_id: message.chat.id, text: "Accendo le luci.", reply_markup: markup)
+      @notifier.send_other(message.chat.id, text: "@#{actor.username} ha acceso le luci.")
       @lights.turn_on
     when /^status/i
       @lights.on_in.tap do |s|
